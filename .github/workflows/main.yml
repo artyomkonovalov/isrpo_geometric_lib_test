@@ -1,18 +1,10 @@
 name: Unit Tests
 
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: [push, pull_request]
 
 jobs:
-  test:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    
-    runs-on: ${{ matrix.os }}
+  test-windows:
+    runs-on: windows-latest
     
     steps:
     - uses: actions/checkout@v4
@@ -22,27 +14,35 @@ jobs:
       with:
         python-version: '3.11'
     
-    - name: List files
-      run: ls -la
+    - name: List files (Windows)
+      shell: cmd
+      run: |
+        echo Listing files...
+        dir
+    
+    - name: Run tests
+      shell: cmd
+      run: |
+        echo Running tests on Windows...
+        python -m unittest discover -p "test_*.py"
+    
+  test-ubuntu:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: List files (Linux)
+      run: |
+        echo Listing files...
+        ls -la
     
     - name: Run tests
       run: |
-        if [ -f "test_circle.py" ]; then
-          echo "Running circle tests..."
-          python -m unittest test_circle.py
-        fi
-        
-        if [ -f "test_rectangle.py" ]; then
-          echo "Running rectangle tests..."
-          python -m unittest test_rectangle.py
-        fi
-        
-        if [ -f "test_square.py" ]; then
-          echo "Running square tests..."
-          python -m unittest test_square.py
-        fi
-        
-        if [ -f "test_triangle.py" ]; then
-          echo "Running triangle tests..."
-          python -m unittest test_triangle.py
-        fi
+        echo Running tests on Ubuntu...
+        python -m unittest discover -p "test_*.py"
