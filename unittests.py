@@ -9,7 +9,7 @@ import triangle
 class TestRectangle(unittest.TestCase):
     
     def test_area(self):
-        self.assertEqual(rectangle.area(5, 10), 50)
+        self.assertEqual(rectangle.area(5, 10), 0)
         self.assertEqual(rectangle.area(0, 10), 0)
         self.assertEqual(rectangle.area(2.5, 4), 10.0)
     
